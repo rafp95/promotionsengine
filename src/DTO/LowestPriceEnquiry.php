@@ -9,7 +9,7 @@
         private ?string $requestLocation;
         private ?string $voucherCode;
         private ?string $requestDate;
-        private ?int $price;
+        private ?float $price;
         private ?int $discountedPrice;
         private ?int $promotionId;
         private ?string $promotionName;
@@ -61,7 +61,7 @@
             return $this->price;
         }
         
-        public function setPrice(?int $price): void
+        public function setPrice(?float $price): void
         {
             $this->price = $price;
         }
@@ -96,6 +96,10 @@
             $this->promotionName = $promotionName;
         }
         #endregion
-        
-        
+
+
+        public function jsonSerialize()
+        {
+            return get_object_vars($this);
+        }
     }
