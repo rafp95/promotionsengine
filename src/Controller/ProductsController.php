@@ -34,7 +34,7 @@
 
             $responseContent = $serializer->serialize($lowestPriceEnquiry, 'json');
 
-            return new Response($responseContent, 200);
+            return new Response(content: $responseContent, status: 200);
         }
         
         #[Route('/products/{id}/promotions', name: 'promotions', methods: 'GET')]
