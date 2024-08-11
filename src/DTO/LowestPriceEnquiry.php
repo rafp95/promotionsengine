@@ -3,9 +3,8 @@
     namespace App\DTO;
     
     use App\Entity\Product;
-    use ReturnTypeWillChange;
     
-    class LowestPriceEnquiry implements PromotionEnquiryInterface
+    class LowestPriceEnquiry implements PriceEnquiryInterface
     {
         #region Props
         private ?Product $product;
@@ -91,12 +90,6 @@
             $this->promotionName = $promotionName;
         }
         #endregion
-
-
-        #[ReturnTypeWillChange] public function jsonSerialize()
-        {
-            return get_object_vars($this);
-        }
         
         public function getProduct(): ?Product
         {
