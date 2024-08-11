@@ -2,10 +2,13 @@
     
     namespace App\DTO;
     
+    use App\Entity\Product;
+    use ReturnTypeWillChange;
+    
     class LowestPriceEnquiry implements PromotionEnquiryInterface
     {
         #region Props
-        private ?int $productId;
+        private ?Product $product;
         private ?string $requestLocation;
         private ?string $voucherCode;
         private ?string $requestDate;
@@ -13,18 +16,10 @@
         private ?int $discountedPrice;
         private ?int $promotionId;
         private ?string $promotionName;
-        
-        public function getProductId(): ?int
-        {
-            return $this->productId;
-        }
         #endregion
         
         #region Getter / Setter
-        public function setProductId(?int $productId): void
-        {
-            $this->productId = $productId;
-        }
+ 
         
         public function getRequestLocation(): ?string
         {
@@ -98,8 +93,18 @@
         #endregion
 
 
-        public function jsonSerialize()
+        #[ReturnTypeWillChange] public function jsonSerialize()
         {
             return get_object_vars($this);
+        }
+        
+        public function getProduct(): ?Product
+        {
+            return $this->product;
+        }
+        
+        public function setProduct(?Product $product): void
+        {
+            $this->product = $product;
         }
     }
