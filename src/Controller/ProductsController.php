@@ -12,13 +12,13 @@
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
-    use Symfony\Component\Serializer\SerializerInterface;
     
     class ProductsController extends AbstractController
     {
         
         public function __construct(
             private readonly ProductRepository $productRepository,
+            private readonly PromotionRepository $promotionRepository
         )
         {
         }
@@ -43,10 +43,17 @@
              */
             $lowestPriceEnquiry = $serializer->deserialize($request->getContent(), LowestPriceEnquiry::class, "json");
             
-            $modifiedEnquiry = $promotionsFilter->apply($lowestPriceEnquiry);
+            $product = $this->productRepository->find($id);
+            $lowestPriceEnquiry->setProduct($product);
+            
+            $promotions = $this->promotionRepository->findValidForProduct(
+              $product,
+              date_create_immutable($lowestPriceEnquiry->getRequestDate())
+            );
+            
+            $modifiedEnquiry = $promotionsFilter->apply($lowestPriceEnquiry, $promotions);
             $responseContent = $serializer->serialize($modifiedEnquiry, 'json');
             
-            $product = $this->productRepository->find($id);
             
             $lowestPriceEnquiry->setProduct($product);
 
