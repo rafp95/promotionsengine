@@ -51,13 +51,17 @@
               date_create_immutable($lowestPriceEnquiry->getRequestDate())
             );
             
-            $modifiedEnquiry = $promotionsFilter->apply($lowestPriceEnquiry, $promotions);
+            $modifiedEnquiry = $promotionsFilter->apply($lowestPriceEnquiry, ...$promotions);
             $responseContent = $serializer->serialize($modifiedEnquiry, 'json');
             
             
             $lowestPriceEnquiry->setProduct($product);
 
-            return new Response(content: $responseContent, status: 200);
+            return new Response(
+                content: $responseContent,
+                status: 200,
+                headers: ['Content-Type' => 'application/json']
+            );
         }
         
         #[Route('/products/{id}/promotions', name: 'promotions', methods: 'GET')]
