@@ -2,6 +2,8 @@
     
     namespace App\Filter;
     
+
+    use App\DTO\LowestPriceEnquiry;
     use App\DTO\PromotionEnquiryInterface;
     use App\Entity\Promotion;
     
@@ -10,10 +12,13 @@
         
         public function apply(PromotionEnquiryInterface $enquiry, Promotion ...$promotion): PromotionEnquiryInterface
         {
-            $enquiry->setDiscountedPrice(5);
-            $enquiry->setPrice(4);
-            $enquiry->setPromotionId(3);
-            $enquiry->setPromotionName("dasdas");
+            /**
+             * @var LowestPriceEnquiry $enquiry
+             */
+            $enquiry->setDiscountedPrice(51);
+            $enquiry->setPrice($enquiry->getProduct()->getPrice());
+            $enquiry->setPromotionId(1);
+            $enquiry->setPromotionName($enquiry->getPromotionName());
             
             return $enquiry;
         }
