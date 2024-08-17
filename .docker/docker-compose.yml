@@ -16,6 +16,8 @@ services:
       - 3306:3306
     networks:
       - symfony_app
+
+
   php:
     build:
       context: ./php
@@ -27,8 +29,12 @@ services:
       - symfony_app_vendor:/var/www/symfony/vendor
       - ../var:/var/www/symfony/var
       - ../vendor:/var/www/symfony/vendor
+    environment:
+      PHP_IDE_CONFIG: "serverName=local.symfony.pl"
     networks:
       - symfony_app
+
+
   nginx:
     build:
       context: ./nginx
