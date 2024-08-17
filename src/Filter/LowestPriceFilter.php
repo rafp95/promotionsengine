@@ -15,8 +15,15 @@
             /**
              * @var LowestPriceEnquiry $enquiry
              */
-            $enquiry->setDiscountedPrice(51);
-            $enquiry->setPrice($enquiry->getProduct()->getPrice());
+            $price = $enquiry->getProduct()->getPrice();
+            $quantity = $enquiry->getQuantity();
+            $lowestPrice = $quantity * $price;
+            
+//            $modifiedPrice = $priceModifier->modify($price, $quantity, $promotion, $enquiry);
+            
+           
+            $enquiry->setDiscountedPrice(250);
+            $enquiry->setPrice(100);
             $enquiry->setPromotionId(1);
             $enquiry->setPromotionName($enquiry->getPromotionName());
             

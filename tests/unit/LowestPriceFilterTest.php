@@ -15,31 +15,36 @@
          */
         public function lowest_price_promotions_filtering_is_applied_correctly(): void
         {
+            //Given
             $product = new Product();
-            $product->setPrice(1);
+            $product->setPrice(100);
             
             $enquiry = new LowestPriceEnquiry();
             $enquiry->setProduct($product);
+            $enquiry->setQuantity(5);
             $enquiry->setRequestDate("2024-08-17");
             $enquiry->setVoucherCode("CODE_12");
             $enquiry->setPromotionName("Black Friday half price sale");
-            
             $promotions = $this->promotionsDataProvider();
             
+            
+            //When
             /**
              * @var LowestPriceFilter $lowestPriceFilter
              */
             $lowestPriceFilter = $this->container->get(LowestPriceFilter::class);
             
+            
+            //Assert
             /**
              * @var LowestPriceEnquiry $filteredEnquiry
              */
             $filteredEnquiry = $lowestPriceFilter->apply($enquiry, ...$promotions);
 
-            $this->assertSame(1, $filteredEnquiry->getPrice());
+            $this->assertSame(100.0, $filteredEnquiry->getPrice());
             $this->assertSame('Black Friday half price sale', $filteredEnquiry->getPromotionName());
             $this->assertSame("CODE_12", $filteredEnquiry->getVoucherCode());
-            $this->assertSame(51,$filteredEnquiry->getDiscountedPrice());
+            $this->assertSame(250,$filteredEnquiry->getDiscountedPrice());
         }
         
         public function promotionsDataProvider(): array
