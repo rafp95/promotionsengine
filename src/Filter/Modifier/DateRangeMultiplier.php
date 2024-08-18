@@ -5,7 +5,7 @@
     use App\DTO\LowestPriceEnquiry;
     use App\DTO\PromotionEnquiryInterface;
     use App\Entity\Promotion;
-    use App\shared\Enums\PromotionType;
+    use App\Shared\Enums\PromotionType;
     
     class DateRangeMultiplier implements PriceModifierInterface
     {
