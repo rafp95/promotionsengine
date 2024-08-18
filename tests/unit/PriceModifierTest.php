@@ -5,7 +5,8 @@
     use App\DTO\LowestPriceEnquiry;
     use App\Entity\Promotion;
     use App\Filter\Modifier\DateRangeMultiplier;
-    use App\shared\const\PromotionType;
+    use App\Filter\Modifier\EventItemsMultiplier;
+    use App\Shared\Enums\PromotionType;
     use App\Tests\ServiceTestCase;
     
     class PriceModifierTest extends ServiceTestCase
@@ -35,4 +36,53 @@
             //Assert
             $this->assertSame(250.0, $modifiedPrice);
         }
+        
+        /**
+         * @test
+         */
+        public function EventItemsMultiplierReturnsCorrectlyModifiedPrice(): void
+        {
+            // Given
+            $enquiry = new LowestPriceEnquiry();
+            $enquiry->setQuantity(5);
+            
+            $promotion = new Promotion();
+            $promotion->setName("Buy one get one free");
+            $promotion->setAdjustment(0.5);
+            $promotion->setCriteria(['minimum_quantity' => 2]);
+            $promotion->setType(PromotionType::EVEN_ITEMS_MULTIPLIER->value);
+            
+            $evenItemsMultiplier = new EventItemsMultiplier();
+            
+            //When
+            
+            $modifiedPrice = $evenItemsMultiplier->modify(100,5,$promotion,$enquiry);
+            
+            $this->assertSame(300.0,$modifiedPrice);
+        }
+        
+        /**
+         * @test
+         */
+        public function EventItemsMultiplierCorrectlyCalculatesAlternatives(): void
+        {
+            // Given
+            $enquiry = new LowestPriceEnquiry();
+            $enquiry->setQuantity(5);
+            
+            $promotion = new Promotion();
+            $promotion->setName("Buy one get half free");
+            $promotion->setAdjustment(0.75);
+            $promotion->setCriteria(['minimum_quantity' => 2]);
+            $promotion->setType(PromotionType::EVEN_ITEMS_MULTIPLIER->value);
+            
+            $evenItemsMultiplier = new EventItemsMultiplier();
+            
+            //When
+            
+            $modifiedPrice = $evenItemsMultiplier->modify(100,5,$promotion,$enquiry);
+            
+            $this->assertSame(400.0,$modifiedPrice);
+        }
+        
     }

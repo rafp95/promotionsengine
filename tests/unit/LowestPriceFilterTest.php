@@ -6,6 +6,7 @@
     use App\Entity\Product;
     use App\Entity\Promotion;
     use App\Filter\LowestPriceFilter;
+    use App\Shared\Enums\PromotionType;
     use App\Tests\ServiceTestCase;
     
     class LowestPriceFilterTest extends ServiceTestCase
@@ -42,9 +43,9 @@
             $filteredEnquiry = $lowestPriceFilter->apply($enquiry, ...$promotions);
 
             $this->assertSame(100.0, $filteredEnquiry->getPrice());
-            $this->assertSame('Black Friday half price sale', $filteredEnquiry->getPromotionName());
+            $this->assertSame('Black Friday 2', $filteredEnquiry->getPromotionName());
             $this->assertSame("CODE_12", $filteredEnquiry->getVoucherCode());
-            $this->assertSame(250,$filteredEnquiry->getDiscountedPrice());
+            $this->assertSame(7,$filteredEnquiry->getDiscountedPrice());
         }
         
         public function promotionsDataProvider(): array
@@ -53,19 +54,19 @@
             $promotionOne->setName("Black Friday");
             $promotionOne->setAdjustment(0.5);
             $promotionOne->setCriteria(["from" => "2024-01-01", "to" => "2024-08-17"]);
-            $promotionOne->setType("date_range_multiplier");
+            $promotionOne->setType(PromotionType::DATE_RANGE_MULTIPLIER->value);
             
             $promotionTwo = new Promotion();
             $promotionTwo->setName("Black Friday 2");
             $promotionTwo->setAdjustment(1.5);
-            $promotionTwo->setCriteria(["from" => "2024-02-01", "to" => "2024-08-17"]);
-            $promotionTwo->setType("fixed_price_voucher2");
+            $promotionTwo->setCriteria(["from" => "2024-02-01", "to" => "2024-08-17", "code" => "CODE_12"]);
+            $promotionTwo->setType(PromotionType::FIXED_PRICE_VOUCHER->value);
             
             $promotionThree = new Promotion();
             $promotionThree->setName("Black Friday 3");
             $promotionThree->setAdjustment(2.5);
-            $promotionThree->setCriteria(["from" => "2024-03-01", "to" => "2024-08-17"]);
-            $promotionThree->setType("fixed_price_voucher3");
+            $promotionThree->setCriteria(["from" => "2024-03-01", "to" => "2024-08-17", "code" => "CODE_13" ]);
+            $promotionThree->setType(PromotionType::FIXED_PRICE_VOUCHER->value);
             
             return [$promotionOne, $promotionTwo, $promotionThree];
         }

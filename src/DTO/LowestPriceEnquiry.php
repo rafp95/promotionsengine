@@ -32,7 +32,7 @@
             return $this;
         }
         
-        public function getQuantity(): ?int
+        public function getQuantity(): ?float
         {
             return $this->quantity;
         }
@@ -120,4 +120,8 @@
             return $this;
         }
         
+        public function setDiscountPrice(float $price): void
+        {
+            $this->discountedPrice = $price;
+        }
     }
