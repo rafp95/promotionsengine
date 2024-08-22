@@ -33,6 +33,7 @@ services:
       PHP_IDE_CONFIG: "serverName=local.symfony.pl"
     networks:
       - symfony_app
+    restart: always
 
 
   nginx:
@@ -48,6 +49,7 @@ services:
       - symfony_app
     env_file:
       - .env.nginx.local
+    restart: always
 
 volumes:
   symfony_app_var:

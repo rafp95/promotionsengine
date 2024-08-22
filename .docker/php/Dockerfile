@@ -21,6 +21,9 @@ RUN apt-get update && apt-get install -y \
     acl \
     && echo 'alias sf="php bin/console"' >> ~/.bashrc
 
+RUN docker-php-ext-install \
+    pdo pdo_mysql zip xsl gd intl opcache exif mbstring bcmath
+
 COPY conf.d/ext-xdebug.ini /usr/local/etc/php/conf.d/ext-xdebug.ini
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
