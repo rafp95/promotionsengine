@@ -4,16 +4,22 @@
     
     use App\Entity\Product;
     use Symfony\Component\Serializer\Annotation\Ignore;
+    use Symfony\Component\Validator\Constraints as Assert;
     
     class LowestPriceEnquiry implements PriceEnquiryInterface
     {
         #region Props
         #[Ignore]
         private ?Product $product;
+        
+        #[Assert\NotBlank]
+        #[Assert\Positive]
         private ?int $quantity = 1;
         private ?string $requestLocation;
         private ?string $voucherCode;
         private ?string $requestDate;
+        
+        #[Assert\Positive]
         private ?float $price;
         private ?int $discountedPrice;
         private ?int $promotionId;
