@@ -20,7 +20,7 @@
         {
             return [
                 'type'        => 'ValidationsErrors',
-                'violations'  => $this->getViolationsArray()
+                'errors'  => $this->getViolationsArray()
             ];
         }
         

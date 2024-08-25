@@ -23,7 +23,7 @@
             
             $response =  new JsonResponse([
                 'data' => null,
-                'errors' => $exceptionData->toArray()
+                'error' => $exceptionData->toArray()
             ]);
             
             $event->setResponse($response);
