@@ -35,6 +35,13 @@ services:
       - symfony_app
     restart: always
 
+  redis:
+    image: redis:7.0.0
+    volumes:
+      - redis_app:/data/redis
+    restart: always
+    networks:
+      - symfony_app
 
   nginx:
     build:
@@ -55,6 +62,7 @@ volumes:
   symfony_app_var:
   symfony_app_vendor:
   db_app:
+  redis_app:
 
 
 networks:

@@ -2,6 +2,7 @@
     
     namespace App\Controller;
     
+    use App\Cache\PromotionCache;
     use App\DTO\LowestPriceEnquiry;
     use App\Filter\PromotionsFilterInterface;
     use App\Repository\ProductRepository;
@@ -28,7 +29,8 @@
             Request $request,
             int $id,
             DTOSerializer $serializer,
-            PromotionsFilterInterface $promotionsFilter
+            PromotionsFilterInterface $promotionsFilter,
+            PromotionCache $promotionCache
         ): Response
         {
             if ($request->headers->has('force-fail')) {
@@ -46,10 +48,8 @@
             $product = $this->productRepository->find($id);
             $lowestPriceEnquiry->setProduct($product);
             
-            $promotions = $this->promotionRepository->findValidForProduct(
-              $product,
-              date_create_immutable($lowestPriceEnquiry->getRequestDate())
-            );
+            $promotions = $promotionCache->findValidProductFromCache($product,$lowestPriceEnquiry->getRequestDate());
+           
             
             $modifiedEnquiry = $promotionsFilter->apply($lowestPriceEnquiry, ...$promotions);
             $responseContent = $serializer->serialize($modifiedEnquiry, 'json');
