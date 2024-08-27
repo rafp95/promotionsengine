@@ -26,6 +26,7 @@
                 'error' => $exceptionData->toArray()
             ]);
             
+            $event->stopPropagation();
             $event->setResponse($response);
         }
     }
