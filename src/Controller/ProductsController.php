@@ -9,7 +9,6 @@
     use App\Repository\PromotionRepository;
     use App\Service\Serializer\DTOSerializer;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    use Symfony\Component\HttpFoundation\JsonResponse;
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
@@ -33,19 +32,13 @@
             PromotionCache $promotionCache
         ): Response
         {
-            if ($request->headers->has('force-fail')) {
-                return new JsonResponse(
-                    data: ['error' => 'Failure message'],
-                    status: $request->headers->get('force-fail')
-                );
-            }
-
             /**
              * @var LowestPriceEnquiry $lowestPriceEnquiry
              */
             $lowestPriceEnquiry = $serializer->deserialize($request->getContent(), LowestPriceEnquiry::class, "json");
             
-            $product = $this->productRepository->find($id);
+            $product = $this->productRepository->findOrFail($id);
+            
             $lowestPriceEnquiry->setProduct($product);
             
             $promotions = $promotionCache->findValidProductFromCache($product,$lowestPriceEnquiry->getRequestDate());
