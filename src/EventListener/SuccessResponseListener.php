@@ -2,6 +2,7 @@
     
     namespace App\EventListener;
     
+    use App\Service\ServiceResponseData;
     use Symfony\Component\EventDispatcher\EventSubscriberInterface;
     use Symfony\Component\HttpFoundation\JsonResponse;
     use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -26,11 +27,13 @@
             }
             
             if($responseEvent->getResponse()->isSuccessful()){
-                $response =  new JsonResponse([
-                    'data' => json_decode($responseEvent->getResponse()->getContent()),
-                    'error' => null
-                ]);
-                $responseEvent->setResponse($response);
+                $response = new ServiceResponseData(
+                    data: json_decode($responseEvent->getResponse()->getContent()),
+                    error: null
+                );
+                $responseEvent->setResponse(new JsonResponse(
+                    $response->getResponse()
+                ));
             }
             
             $this->called = true;

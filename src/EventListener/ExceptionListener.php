@@ -4,6 +4,7 @@
     
     use App\Service\ServiceException;
     use App\Service\ServiceExceptionData;
+    use App\Service\ServiceResponseData;
     use Symfony\Component\HttpFoundation\JsonResponse;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -21,12 +22,16 @@
                 $exceptionData = new ServiceExceptionData($statusCode, $exception->getMessage());
             }
             
-            $response =  new JsonResponse([
-                'data' => null,
-                'error' => $exceptionData->toArray()
-            ]);
+            
+            
+            $response = new ServiceResponseData(
+                data: null,
+                error: $exceptionData->toArray()
+            );
             
             $event->stopPropagation();
-            $event->setResponse($response);
+            $event->setResponse(new JsonResponse(
+                $response->getResponse()
+            ));
         }
     }
