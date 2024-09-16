@@ -8,8 +8,7 @@
     {
         public function __construct(
             public Request $request,
-            public int $id
+            public int $id,
         ) {
         }
-        
     }
