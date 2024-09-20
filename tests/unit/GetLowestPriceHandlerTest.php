@@ -2,31 +2,52 @@
 
 namespace App\Tests\unit;
 
-use App\Handler\GetLowestPriceHandler;
+use App\Cache\PromotionCache;
+use App\Filter\PromotionsFilterInterface;
+use App\Repository\ProductRepository;
 use App\Tests\ServiceTestCase;
+use App\Handler\GetLowestPriceHandler;
+use App\Query\GetLowestPriceQuery;
+use App\Service\Serializer\DTOSerializer;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class GetLowestPriceHandlerTest extends ServiceTestCase
 {
     private $handler;
     private $messageBus;
 
-    protected function setUp(): void
-    {
-        $this->handler = new GetLowestPriceHandler(
-
-        );
-        $this->messageBus = $this->createMock(MessageBusInterface::class);
-    }
-
     public function testHandle()
     {
-        $query = new GetLowestPriceQuery();
-        $envelope = new Envelope($query);
 
-        $this->messageBus->expects($this->once())
-            ->method('dispatch')
-            ->with($envelope);
+        $serializer = $this->container->get(DTOSerializer::class);
+        $promotionsFilter = $this->container->get(PromotionsFilterInterface::class);
+        $promotionCache = $this->container->get(PromotionCache::class);
+        $productRepository = $this->container->get(ProductRepository::class);
 
-        $this->handler->__invoke($query);
+        $this->handler = new GetLowestPriceHandler(
+            $serializer,
+            $promotionsFilter,
+            $promotionCache,
+            $productRepository,
+        );
+        $this->messageBus = $this->createMock(MessageBusInterface::class);
+
+
+
+        $params = [
+            'id' => 1,
+            'requestDate' => "2024-10-01"
+        ];
+
+        $request = new Request(content: json_encode($params));
+
+
+
+        $query = new GetLowestPriceQuery($request, 1);
+        $result = $this->handler->__invoke($query);
+
+        $this->assertNotEmpty($result);
     }
 }
