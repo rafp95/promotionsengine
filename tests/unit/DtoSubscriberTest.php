@@ -24,7 +24,7 @@
         /**
          * @test
          */
-        public function a_dto_is_valid_after_it_has_been_created()
+        public function testDtoIsValidAfterHasBeenCreated()
         {
             $dto = new LowestPriceEnquiry();
             $dto->setQuantity(-5);
