@@ -30,7 +30,7 @@
             
             return new Response(
                 content: ResponseFromDispatch::toResult($responseContent),
-                status: 200,
+                status: Response::HTTP_OK,
                 headers: ['Content-Type' => 'application/json']
             );
         }
