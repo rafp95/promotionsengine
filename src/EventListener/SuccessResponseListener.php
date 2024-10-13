@@ -22,6 +22,10 @@
         
         public function onResponse(ResponseEvent $responseEvent): void
         {
+            if($_SERVER['REQUEST_URI'] === '/api'){
+                return;
+            }
+            
             if($this->called){
                 return;
             }
