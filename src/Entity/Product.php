@@ -8,13 +8,20 @@ use ApiPlatform\OpenApi\Model;
 use App\Controller\ProductsController;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Response;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(operations: [
     new Post(
         uriTemplate: '/products/{id}/lowest-price',
+        status: Response::HTTP_OK,
         controller: ProductsController::class,
         openapi: new Model\Operation(
+            responses: [
+                '200' => [
+                    'description' => 'promo cods'
+                ],
+            ],
             summary: 'Get lowest price product',
             description: '',
             requestBody: new Model\RequestBody(
