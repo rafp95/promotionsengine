@@ -15,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
         uriTemplate: '/products/{id}/lowest-price',
         controller: ProductsController::class,
         openapi: new Model\Operation(
+            summary: 'Get lowest price product',
+            description: '',
             requestBody: new Model\RequestBody(
                 content: new \ArrayObject([
                     'application/json' => [
